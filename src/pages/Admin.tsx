@@ -84,7 +84,7 @@ export const Admin = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              User Growth & Streamssd
+              User Growth & Streams
             </h2>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={monthlyData}>

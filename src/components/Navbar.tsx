@@ -1,32 +1,51 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, Crown } from 'lucide-react';
+import { Search, Crown, Music, Languages } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import { useLanguageStore } from '../store/languageStore';
 import { motion } from 'framer-motion';
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, openAuthModal } = useAuthStore();
+  const { language, setLanguage, t } = useLanguageStore();
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700 z-30">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-pink-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">M</span>
+          <Link to={isAuthenticated ? "/home" : "/"} className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-green-500 via-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
+              <Music className="text-white" size={24} />
             </div>
-            <span className="font-bold text-xl text-gray-900 dark:text-white hidden sm:block">MusicFlow</span>
+            <span className="font-bold text-xl text-gray-900 dark:text-white hidden sm:block">
+              {t('app.name')}
+            </span>
           </Link>
 
           <div className="flex items-center gap-4">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/search')}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              onClick={() => setLanguage(language === 'en' ? 'am' : 'en')}
+              className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              title={language === 'en' ? 'አማርኛ' : 'English'}
             >
-              <Search size={20} />
+              <Languages size={18} />
+              <span className="text-sm font-medium hidden md:block">
+                {language === 'en' ? 'አማ' : 'EN'}
+              </span>
             </motion.button>
+
+            {isAuthenticated && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/search')}
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              >
+                <Search size={20} />
+              </motion.button>
+            )}
 
             {isAuthenticated ? (
               <>
@@ -35,10 +54,10 @@ export const Navbar = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate('/premium')}
-                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-shadow"
+                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-shadow"
                   >
                     <Crown size={16} />
-                    <span>Get Premium</span>
+                    <span>{t('nav.premium')}</span>
                   </motion.button>
                 )}
 
@@ -51,7 +70,7 @@ export const Navbar = () => {
                   <img
                     src={user?.photoUrl}
                     alt={user?.username}
-                    className="w-10 h-10 rounded-full object-cover border-2 border-orange-500"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-green-500"
                   />
                 </motion.button>
               </>
@@ -61,15 +80,15 @@ export const Navbar = () => {
                   onClick={() => openAuthModal('signin')}
                   className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-medium"
                 >
-                  Sign In
+                  {t('auth.signIn')}
                 </button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => openAuthModal('signup')}
-                  className="px-4 py-2 bg-orange-500 text-white rounded-full font-semibold shadow-lg hover:bg-orange-600 transition-colors"
+                  className="px-4 py-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-shadow"
                 >
-                  Sign Up
+                  {t('auth.signUp')}
                 </motion.button>
               </div>
             )}
